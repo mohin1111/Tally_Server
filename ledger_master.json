@@ -1,0 +1,454 @@
+{
+  "company_name": "Your Company Name",
+  "username": null,
+  "password": null,
+  "ledgers": [
+    {
+      "_comment": "=== REQUIRED FIELDS ===",
+      "name": "Ledger Name",
+      "parent": "Sundry Debtors",
+
+      "_comment_basic": "=== BASIC IDENTITY ===",
+      "currency_name": "INR",
+      "mailing_name": "Ledger Mailing Name",
+      "description": "Ledger description",
+      "opening_balance": "0",
+      "country_of_residence": "India",
+      "starting_from": "20240401",
+
+      "_comment_contact": "=== CONTACT ===",
+      "email": "contact@example.com",
+      "email_cc": "cc@example.com",
+      "ledger_mobile": "9876543210",
+      "ledger_phone": "080-12345678",
+      "ledger_contact": "Contact Person Name",
+      "ledger_fax": "080-12345679",
+      "ledger_country_isd_code": "+91",
+      "website": "https://www.example.com",
+
+      "_comment_tax_reg": "=== TAX REGISTRATION ===",
+      "income_tax_number": "ABCDE1234F",
+      "name_on_pan": "Name As On PAN",
+      "gst_registration_type": "Regular",
+      "vat_dealer_type": "",
+      "party_gstin": "29ABCDE1234F1Z5",
+      "gst_type_of_supply": "Goods",
+      "gst_nature_of_supply": "",
+      "gst_appropriate_to": "",
+      "prior_state_name": "Karnataka",
+      "old_led_state_name": "",
+      "old_country_name": "",
+      "old_pincode": "",
+
+      "_comment_tax_class": "=== TAX CLASSIFICATION ===",
+      "tax_classification_name": "",
+      "tax_type": "",
+      "gst_type": "",
+      "appropriate_for": "",
+      "basic_type_of_duty": "",
+      "sys_debit_parent": "",
+
+      "_comment_duties": "=== DUTIES & TAXES (for GST/Tax ledgers) ===",
+      "gst_duty_head": "Central Tax",
+      "rate_of_tax_calculation": "9",
+      "rounding_method": "",
+      "rounding_limit": "",
+      "led_addl_alloc_type": "",
+
+      "_comment_gst_app": "=== GST APPLICABILITY ===",
+      "gst_applicable": "Applicable",
+
+      "_comment_tds": "=== TDS ===",
+      "is_tds_applicable": "",
+      "tds_applicable": "",
+      "tds_deductee_type": "",
+      "tds_deductee_type_mst": "",
+      "tds_rate_name": "",
+
+      "_comment_tcs": "=== TCS ===",
+      "is_tcs_applicable": "",
+      "tcs_applicable": "",
+
+      "_comment_vat": "=== VAT ===",
+      "vat_applicable": "",
+
+      "_comment_excise": "=== EXCISE ===",
+      "excise_applicability": "",
+      "excise_alloc_type": "",
+      "excise_duty_type": "",
+      "excise_ledger_classification": "",
+      "excise_nature_of_purchase": "",
+
+      "_comment_stax": "=== SERVICE TAX ===",
+      "service_tax_applicable": "",
+      "service_category": "",
+      "ledger_fbt_category": "",
+      "it_exempt_applicable": "",
+
+      "_comment_bank": "=== BANK ACCOUNT (when ledger IS a bank) ===",
+      "bank_acch_older_name": "Account Holder Name",
+      "bank_details": "Bank Branch Details",
+      "ifs_code": "SBIN0001234",
+      "branch_name": "Main Branch",
+      "banking_config_bank": "State Bank of India",
+      "banking_config_bank_id": "",
+      "bank_capsule_id": "",
+      "bank_config_ifsc": "SBIN0001234",
+      "bank_config_short_code": "",
+      "encrypted_by": "",
+      "imf_name": "",
+      "new_imf_location": "",
+      "imported_imf_location": "",
+      "payment_inst_location": "",
+      "customer_code": "",
+
+      "_comment_interest": "=== INTEREST ===",
+      "is_interest_on": "",
+      "type_of_interest_on": "",
+      "interest_incl_day_of_addition": "",
+      "interest_incl_day_of_deduction": "",
+      "is_interest_incl_last_day": "",
+      "interest_on_billwise": "",
+      "override_interest": "",
+      "override_adv_interest": "",
+
+      "_comment_schvi": "=== SCHEDULE VI ===",
+      "schvi_credit_parent": "",
+      "schvi_debit_parent": "",
+      "balancing_type": "",
+
+      "_comment_msme": "=== MSME ===",
+      "enterprise_type": "Micro",
+      "udyam_reg_number": "UDYAM-KA-00-0000001",
+
+      "_comment_flags": "=== BEHAVIOR FLAGS (true/false -> converted to Yes/No in XML) ===",
+      "is_bill_wise_on": false,
+      "is_cost_centres_on": false,
+      "affects_stock": false,
+      "for_payroll": false,
+      "is_cheque_printing_enabled": false,
+      "is_related_party": false,
+      "is_gst_applicable": false,
+      "is_excise_applicable": false,
+      "allow_in_mobile": false,
+      "is_cost_tracking_on": false,
+      "plas_income_expense": false,
+      "is_ebanking_enabled": false,
+      "is_deleted": false,
+      "is_abc_enabled": false,
+      "is_behave_as_duty": false,
+      "is_beneficiary_code_on": false,
+      "is_bnf_code_supported": false,
+      "is_condensed": false,
+      "is_credit_days_chk_on": false,
+      "is_exempted": false,
+      "is_export_file_encrypted": false,
+      "is_export_on_vch_create": false,
+      "is_fbt_applicable": false,
+      "is_input_credit": false,
+      "is_edli_applicable": false,
+      "is_tds_expense": false,
+      "is_tds_projected": false,
+      "tds_deductee_is_special_rate": false,
+      "ignore_tds_exempt": false,
+      "appropriate_tax_value": false,
+      "is_against_form_c": false,
+      "is_stx_party": false,
+      "is_stx_non_realized_type": false,
+      "for_service_tax": false,
+      "is_party_exempted": false,
+      "is_sez_party": false,
+      "is_oth_territory_assessee": false,
+      "is_transporter": false,
+      "is_rate_inclusive_vat": false,
+      "use_for_vat": false,
+      "use_for_esi_eligibility": false,
+      "use_for_gratuity": false,
+      "use_for_kkc": false,
+      "use_for_sbc": false,
+      "use_for_purchase_tax": false,
+      "use_for_notional_itc": false,
+      "use_as_notional_bank": false,
+      "is_used_for_cvd": false,
+      "is_excise_merchant_exporter": false,
+      "is_ecomm_operator": false,
+      "override_based_on_realization": false,
+      "override_credit_limit": false,
+      "ignore_mismatch_with_warning": false,
+      "behave_as_payment_gateway": false,
+      "led_belongs_to_non_taxable": false,
+      "is_ecash_ledger": false,
+      "is_ecd_iff_in_sd_date": false,
+      "consider_purchase_for_export": false,
+      "allow_export_with_errors": false,
+      "show_in_payslip": false,
+      "is_salary_mul_file": false,
+      "is_salary_grouped": false,
+      "is_salary_trans_grouped_for_brs": false,
+      "is_abatement_applicable": false,
+      "is_pay_upload": false,
+      "is_pay_batch_only_sal": false,
+      "is_pymt_adv_online": false,
+      "is_pymt_adv_cc_enabled": false,
+      "is_include_pymt_adv_billwise": false,
+      "is_product_code_based": false,
+      "is_filename_format_supported": false,
+      "has_client_code": false,
+      "is_batch_enabled": false,
+      "is_scb_uae": false,
+      "is_bank_status_app": false,
+      "bank_is_reconcile_perfect_matches": false,
+      "is_ebanking_supported": false,
+      "is_echeque_supported": false,
+      "is_edd_supported": false,
+      "has_echeque_city": false,
+      "has_echeque_delivery_mode": false,
+      "has_echeque_delivery_to": false,
+      "has_echeque_print_location": false,
+      "has_echeque_payable_location": false,
+      "has_echeque_bank_location": false,
+      "has_edd_city": false,
+      "has_edd_delivery_mode": false,
+      "has_edd_delivery_to": false,
+      "has_edd_print_location": false,
+      "has_edd_payable_location": false,
+      "has_edd_bank_location": false,
+      "payins_is_batch_applicable": false,
+      "payins_is_file_num_app": false,
+      "audited": false,
+
+      "sort_position": " 1000",
+
+      "_comment_mailing": "=== MAILING ADDRESS ===",
+      "mailing_details": {
+        "address_lines": ["Address Line 1", "Address Line 2", "Address Line 3"],
+        "applicable_from": "20240401",
+        "pincode": "560001",
+        "mailing_name": "Mailing Name",
+        "state": "Karnataka",
+        "country": "India"
+      },
+
+      "_comment_multi_addr": "=== MULTI ADDRESS (array - one entry per address) ===",
+      "multi_address_list": [
+        {
+          "address_name": "Office Address",
+          "address_lines": ["123 MG Road", "Suite 456"],
+          "pincode": "560001",
+          "state": "Karnataka",
+          "country_name": "India",
+          "country_isd_code": "+91",
+          "email": "office@example.com",
+          "prior_state_name": "Karnataka",
+          "place_of_supply": "Karnataka",
+          "income_tax_number": "ABCDE1234F",
+          "gst_registration_type": "Regular",
+          "vat_dealer_type": "",
+          "party_gstin": "29ABCDE1234F1Z5",
+          "is_oth_territory_assessee": false,
+          "is_party_exempted": false,
+          "is_sez_party": false,
+          "is_excise_merchant_exporter": false
+        }
+      ],
+
+      "_comment_gst_reg": "=== GST REGISTRATION (array - one entry per registration) ===",
+      "gst_reg_details": [
+        {
+          "applicable_from": "20240401",
+          "gst_registration_type": "Regular",
+          "state": "Karnataka",
+          "place_of_supply": "Karnataka",
+          "gstin": "29ABCDE1234F1Z5",
+          "is_oth_territory_assessee": false,
+          "consider_purchase_for_export": false,
+          "is_transporter": false,
+          "is_common_party": false
+        }
+      ],
+
+      "_comment_payment": "=== PAYMENT DETAILS / VENDOR BANK (array) ===",
+      "payment_details": [
+        {
+          "ifsc_code": "SBIN0001234",
+          "bank_name": "State Bank of India",
+          "account_number": "1234567890",
+          "payment_favouring": "Vendor Name",
+          "transaction_name": "NEFT",
+          "bank_id": "",
+          "swift_code": "SBININBB",
+          "set_as_default": false,
+          "default_transaction_type": "NEFT",
+          "company_bank": ""
+        }
+      ],
+
+      "_comment_tds_rules": "=== TDS DEDUCTION RULES (array) ===",
+      "tds_deduction_rules": [
+        {
+          "nature_of_payment": "194C - Payment to Contractors"
+        }
+      ],
+
+      "_comment_lower_ded": "=== TDS LOWER DEDUCTION CERTIFICATES (array) ===",
+      "lower_deductions": [
+        {
+          "certificate_no": "CERT/2024/001",
+          "valid_from": "20240401",
+          "valid_to": "20250331",
+          "limit_amount": "500000",
+          "rate_of_deduction": "1",
+          "nature_of_payment": "194C - Payment to Contractors"
+        }
+      ],
+
+      "_comment_tds_exempt": "=== TDS EXEMPTION RULES (array) ===",
+      "tds_exemption_rules": [
+        {
+          "nature_of_payment": "194C - Payment to Contractors"
+        }
+      ],
+
+      "_comment_interest_coll": "=== INTEREST COLLECTION (array) ===",
+      "interest_collection": [
+        {
+          "interest_from_date": "20240401",
+          "interest_to_date": "20250331",
+          "interest_style": "Simple",
+          "interest_balance_type": "All Balances",
+          "round_type": "",
+          "interest_rate": "12"
+        }
+      ],
+
+      "_comment_gst_det": "=== GST RATE DETAILS (array - for expense/income ledgers) ===",
+      "gst_details": [
+        {
+          "applicable_from": "20240401",
+          "src_of_gst_details": "As per Masters",
+          "hsn_code": "9988",
+          "taxability": "Taxable",
+          "gst_nature_of_transaction": "Sales Taxable",
+          "gst_calc_slab_on_mrp": false,
+          "is_reverse_charge_applicable": false,
+          "is_non_gst_goods": false,
+          "gst_ineligible_itc": false,
+          "include_exp_for_slab_calc": false,
+          "state_wise_details": [
+            {
+              "state_name": "Karnataka",
+              "rate_details": [
+                {
+                  "gst_rate_duty_head": "Central Tax",
+                  "gst_rate_valuation_type": "Based on Value",
+                  "gst_rate": "9"
+                },
+                {
+                  "gst_rate_duty_head": "State Tax",
+                  "gst_rate_valuation_type": "Based on Value",
+                  "gst_rate": "9"
+                },
+                {
+                  "gst_rate_duty_head": "Integrated Tax",
+                  "gst_rate_valuation_type": "Based on Value",
+                  "gst_rate": "18"
+                },
+                {
+                  "gst_rate_duty_head": "Cess",
+                  "gst_rate_valuation_type": "Based on Value",
+                  "gst_rate": "0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+
+      "_comment_hsn": "=== HSN / SAC DETAILS (array) ===",
+      "hsn_details": [
+        {
+          "applicable_from": "20240401",
+          "hsn_code": "9988",
+          "hsn": "Other Manufacturing Services",
+          "src_of_hsn_details": "As per Masters"
+        }
+      ],
+
+      "_comment_bills": "=== OPENING BILL ALLOCATIONS (array) ===",
+      "bill_allocations": [
+        {
+          "name": "INV/2024/001",
+          "bill_type": "New Ref",
+          "bill_date": "20240415",
+          "bill_credit_period": "30 Days",
+          "amount": "50000",
+          "opening_balance": "50000",
+          "is_advance": false
+        }
+      ],
+
+      "_comment_contacts": "=== CONTACT PERSONS (array) ===",
+      "contact_details": [
+        {
+          "name": "John Doe",
+          "contact_person": "John Doe",
+          "mobile": "9876543210",
+          "phone": "080-12345678",
+          "phone_number": "08012345678",
+          "email": "john@example.com",
+          "country_isd_code": "+91",
+          "is_default_whatsapp_num": false
+        }
+      ],
+
+      "_comment_msme_det": "=== MSME REGISTRATION (array) ===",
+      "msme_details": [
+        {
+          "applicable_from": "20240401",
+          "from_date": "20240401",
+          "enterprise_type": "Micro",
+          "udyam_reg_number": "UDYAM-KA-00-0000001",
+          "msme_activity_type": "Manufacturing"
+        }
+      ],
+
+      "_comment_cheque": "=== CHEQUE RANGE (array - for bank ledgers) ===",
+      "cheque_range": [
+        {
+          "cheque_from": "000001",
+          "cheque_to": "000100"
+        }
+      ],
+
+      "_comment_audit": "=== AUDIT DETAILS (array) ===",
+      "audit_details": [
+        {
+          "period_from": "20240401",
+          "period_to": "20250331",
+          "audit_period_from": "20240401",
+          "is_clause17_applicable": false,
+          "is_group_for_loan_pymnt": false,
+          "is_group_for_loan_rcpt": false,
+          "is_periodic_ledger": false,
+          "is_related_party": false
+        }
+      ],
+
+      "_comment_schvi_det": "=== SCHEDULE VI DETAILS (array) ===",
+      "schvi_details": [
+        {
+          "period_from": "20240401",
+          "balancing_type": "",
+          "schvi_credit_parent": "",
+          "schvi_debit_parent": ""
+        }
+      ],
+
+      "_comment_lang": "=== DISPLAY NAME / LANGUAGE ===",
+      "language_name": {
+        "name": "Ledger Name",
+        "language_id": " 1033"
+      }
+    }
+  ]
+}

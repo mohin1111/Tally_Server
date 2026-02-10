@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(cmd.exe /c \"powershell -ExecutionPolicy Bypass -Command \"\"Get-Content ''C:\\\\Users\\\\JainishJain\\\\Tally\\\\Master.xml'' -Encoding Unicode -TotalCount 50\"\"\")"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "company_name": "ABC Traders",
+  "username": null,
+  "password": null,
+  "vouchers": [
+    {
+      "date": "20250501",
+      "voucher_type_name": "Sales",
+      "party_ledger_name": "Customer Alpha",
+      "is_invoice": false,
+      "ledger_entries": [
+        {
+          "ledger_name": "Customer Alpha",
+          "is_deemed_positive": true,
+          "is_party_ledger": true,
+          "amount": "-5000"
+        },
+        {
+          "ledger_name": "Sales",
+          "is_deemed_positive": false,
+          "is_party_ledger": false,
+          "amount": "5000"
+        }
+      ]
+    }
+  ]
+}
