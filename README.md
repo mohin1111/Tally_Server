@@ -1,6 +1,6 @@
 # Tally Integration API
 
-A FastAPI application that creates ledgers and vouchers in TallyPrime via its HTTP XML interface.
+A FastAPI application that creates and fetches ledgers, vouchers, and stock items in TallyPrime via its HTTP XML interface.
 
 ## Prerequisites
 
@@ -28,12 +28,25 @@ The API docs (Swagger UI) will be available at: **http://localhost:8000/docs**
 
 ## API Endpoints
 
-| Method | Endpoint           | Description                     |
-|--------|--------------------|---------------------------------|
-| GET    | `/health`          | Health check                    |
-| POST   | `/create-ledger`   | Create one or more ledgers      |
+### Create (Import into Tally)
+
+| Method | Endpoint           | Description                          |
+|--------|--------------------|------------------------------------- |
+| GET    | `/health`          | Health check                         |
+| POST   | `/create-ledger`   | Create one or more ledgers           |
 | POST   | `/create-purchase` | Create one or more purchase vouchers |
 | POST   | `/create-sales`    | Create one or more sales vouchers    |
+
+### Fetch (Export from Tally)
+
+| Method | Endpoint              | Query Params                                  | Description                              |
+|--------|-----------------------|-----------------------------------------------|------------------------------------------|
+| GET    | `/ledgers`            | `company_name`                                | Fetch all ledger masters                 |
+| GET    | `/stock-items`        | `company_name`                                | Fetch all stock items                    |
+| GET    | `/vouchers/purchase`  | `company_name`, `from_date`, `to_date`        | Fetch purchase vouchers in a date range  |
+| GET    | `/vouchers/sales`     | `company_name`, `from_date`, `to_date`        | Fetch sales vouchers in a date range     |
+
+> **Note:** `from_date` and `to_date` use the **YYYYMMDD** format (e.g., `20250401` for April 1, 2025).
 
 ## Authentication (Optional)
 
@@ -241,6 +254,105 @@ The purchase and sales endpoints also support Payment and Receipt vouchers — j
 }
 ```
 
+## Fetching Ledgers
+
+**Endpoint:** `GET /ledgers?company_name=ABC Traders`
+
+**Response:**
+
+```json
+{
+  "count": 7,
+  "ledgers": [
+    {
+      "name": "Acme Industries",
+      "group": "Sundry Debtors",
+      "opening_balance": "-50000.00",
+      "mailing_name": null,
+      "currency": null,
+      "email": "rahul@acme.com",
+      "mobile": "9876543210",
+      "contact": "Rahul Sharma",
+      "pan": "ABCDE1234F",
+      "gstin": "29ABCDE1234F1Z5",
+      "gst_registration_type": "Regular",
+      "country": "India",
+      "bill_wise": "Yes",
+      "cost_centres": "No",
+      "description": null
+    }
+  ]
+}
+```
+
+All fields are always present in the response — fields without a value are returned as `null`.
+
+## Fetching Vouchers
+
+**Purchase:** `GET /vouchers/purchase?company_name=ABC Traders&from_date=20250401&to_date=20260331`
+
+**Sales:** `GET /vouchers/sales?company_name=ABC Traders&from_date=20250401&to_date=20260331`
+
+**Response:**
+
+```json
+{
+  "count": 1,
+  "vouchers": [
+    {
+      "voucher_number": "1",
+      "date": "20250401",
+      "voucher_type": "Purchase",
+      "party": "Supplier Beta",
+      "narration": null,
+      "reference": null,
+      "party_gstin": null,
+      "place_of_supply": null,
+      "is_invoice": "No",
+      "guid": "d5f0247c-...-00000019",
+      "amount": "5000.00",
+      "ledger_entries": [
+        {
+          "ledger": "Supplier Beta",
+          "amount": "5000.00",
+          "is_party": true
+        },
+        {
+          "ledger": "Purchases",
+          "amount": "-5000.00",
+          "is_party": false
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Fetching Stock Items
+
+**Endpoint:** `GET /stock-items?company_name=ABC Traders`
+
+**Response:**
+
+```json
+{
+  "count": 2,
+  "stock_items": [
+    {
+      "name": "Silver 999",
+      "group": "Primary",
+      "unit": "Kgs",
+      "opening_balance": null,
+      "opening_value": null,
+      "opening_rate": null,
+      "mailing_name": null,
+      "description": null,
+      "gst_applicable": "Applicable"
+    }
+  ]
+}
+```
+
 ## Date Format
 
 All dates use the format **YYYYMMDD** (e.g., `20250601` for June 1, 2025). The date must fall within the company's active financial year.
@@ -295,13 +407,14 @@ Common errors:
 
 ```
 Tally/
-├── app.py                          # FastAPI server with all endpoints
+├── app.py                          # FastAPI server with all endpoints (create + fetch)
 ├── models.py                       # Pydantic models for ledger creation (394+ fields)
 ├── xml_builder.py                  # XML builder for ledger masters
 ├── purchase_models.py              # Pydantic models for purchase/payment vouchers
 ├── purchase_xml_builder.py         # XML builder for purchase/payment vouchers
 ├── sales_models.py                 # Pydantic models for sales/receipt vouchers
 ├── sales_xml_builder.py            # XML builder for sales/receipt vouchers
+├── fetch_xml_builder.py            # XML builder for export (fetch) requests
 ├── requirements.txt                # Python dependencies
 ├── ledger_master.json              # Reference JSON — all ledger fields
 ├── ledger_api_contract.json        # API contract for ledger endpoint
@@ -332,4 +445,20 @@ Tally/
      -H "Content-Type: application/json" \
      -d "{\"company_name\": \"ABC Traders\", \"vouchers\": [{\"date\": \"20250601\", \"voucher_type_name\": \"Purchase\", \"party_ledger_name\": \"Test Supplier\", \"is_invoice\": false, \"ledger_entries\": [{\"ledger_name\": \"Test Supplier\", \"is_deemed_positive\": false, \"is_party_ledger\": true, \"amount\": \"1000\"}, {\"ledger_name\": \"Purchases\", \"is_deemed_positive\": true, \"is_party_ledger\": false, \"amount\": \"-1000\"}]}]}"
    ```
-5. Or use the Swagger UI at **http://localhost:8000/docs** for interactive testing
+5. Fetch ledgers:
+   ```bash
+   curl "http://localhost:8000/ledgers?company_name=ABC%20Traders"
+   ```
+6. Fetch purchase vouchers for FY 2025-26:
+   ```bash
+   curl "http://localhost:8000/vouchers/purchase?company_name=ABC%20Traders&from_date=20250401&to_date=20260331"
+   ```
+7. Fetch sales vouchers for FY 2025-26:
+   ```bash
+   curl "http://localhost:8000/vouchers/sales?company_name=ABC%20Traders&from_date=20250401&to_date=20260331"
+   ```
+8. Fetch stock items:
+   ```bash
+   curl "http://localhost:8000/stock-items?company_name=ABC%20Traders"
+   ```
+9. Or use the Swagger UI at **http://localhost:8000/docs** for interactive testing
