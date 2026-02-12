@@ -55,6 +55,41 @@ def build_fetch_stock_items_xml(company_name: str) -> str:
     )
 
 
+def build_fetch_stock_summary_xml(company_name: str) -> str:
+    """Build XML to fetch stock-in-hand summary via TDL Collection."""
+    return (
+        "<ENVELOPE>"
+        "<HEADER>"
+        "<VERSION>1</VERSION>"
+        "<TALLYREQUEST>Export</TALLYREQUEST>"
+        "<TYPE>Collection</TYPE>"
+        "<ID>StockSummary</ID>"
+        "</HEADER>"
+        "<BODY>"
+        "<DESC>"
+        "<STATICVARIABLES>"
+        "<SVEXPORTFORMAT>$$SysName:XML</SVEXPORTFORMAT>"
+        f"<SVCURRENTCOMPANY>{company_name}</SVCURRENTCOMPANY>"
+        "</STATICVARIABLES>"
+        "<TDL>"
+        "<TDLMESSAGE>"
+        '<COLLECTION NAME="StockSummary" ISMODIFY="No">'
+        "<TYPE>Stock Item</TYPE>"
+        "<NATIVEMETHOD>Name</NATIVEMETHOD>"
+        "<NATIVEMETHOD>Parent</NATIVEMETHOD>"
+        "<NATIVEMETHOD>BaseUnits</NATIVEMETHOD>"
+        "<NATIVEMETHOD>ClosingBalance</NATIVEMETHOD>"
+        "<NATIVEMETHOD>ClosingValue</NATIVEMETHOD>"
+        "<NATIVEMETHOD>ClosingRate</NATIVEMETHOD>"
+        "</COLLECTION>"
+        "</TDLMESSAGE>"
+        "</TDL>"
+        "</DESC>"
+        "</BODY>"
+        "</ENVELOPE>"
+    )
+
+
 def build_fetch_vouchers_xml(
     company_name: str,
     voucher_type: str,

@@ -5,6 +5,7 @@ import re
 import httpx
 import xmltodict
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import JSONResponse
 
 from models import CreateLedgerPayload
 from purchase_models import CreatePurchasePayload
@@ -15,6 +16,7 @@ from sales_xml_builder import build_sales_xml
 from fetch_xml_builder import (
     build_fetch_ledgers_xml,
     build_fetch_stock_items_xml,
+    build_fetch_stock_summary_xml,
     build_fetch_vouchers_xml,
 )
 
@@ -25,6 +27,7 @@ app = FastAPI(
 )
 
 TALLY_URL = "http://localhost:9000"
+DEFAULT_COMPANY = "ABC Traders"
 
 
 @app.get("/health")
@@ -269,6 +272,25 @@ def _clean_stock_item(raw: dict) -> dict:
     return out
 
 
+def _text(val) -> str:
+    """Extract text from an xmltodict value that may be a str or dict."""
+    if isinstance(val, dict):
+        return val.get("#text", "")
+    return str(val) if val else ""
+
+
+def _clean_stock_summary_item(raw: dict) -> dict:
+    """Clean a STOCKITEM from the TDL Collection response."""
+    return {
+        "name": raw.get("@NAME", ""),
+        "group": _text(raw.get("PARENT")),
+        "unit": _text(raw.get("BASEUNITS")),
+        "closing_balance": _text(raw.get("CLOSINGBALANCE")),
+        "closing_value": _text(raw.get("CLOSINGVALUE")),
+        "closing_rate": _text(raw.get("CLOSINGRATE")),
+    }
+
+
 # ---- GET endpoints -----------------------------------------------------------
 
 
@@ -285,6 +307,38 @@ async def get_ledgers(
     raw_ledgers = _extract_objects(parsed, "LEDGER")
     ledgers = [_clean_ledger(r) for r in raw_ledgers]
     return {"count": len(ledgers), "ledgers": ledgers}
+
+
+@app.get("/api/ledger/by-gstin/{gstin}")
+async def get_ledger_by_gstin(gstin: str):
+    """Look up a single ledger by its GSTIN (partial or full match)."""
+    gstin_upper = gstin.strip().upper()
+
+    xml_str = build_fetch_ledgers_xml(DEFAULT_COMPANY)
+    parsed = await _fetch_from_tally(xml_str)
+    if "error" in parsed:
+        return parsed
+
+    raw_ledgers = _extract_objects(parsed, "LEDGER")
+
+    for raw in raw_ledgers:
+        party_gstin = (raw.get("PARTYGSTIN") or "").strip().upper()
+        if gstin_upper in party_gstin:
+            cleaned = _clean_ledger(raw)
+            return {
+                "status": "success",
+                "gstin": party_gstin,
+                "ledger_name": cleaned["name"],
+                "ledger": cleaned,
+            }
+
+    return JSONResponse(
+        status_code=404,
+        content={
+            "status": "error",
+            "message": f"No ledger found for GSTIN: {gstin_upper}",
+        },
+    )
 
 
 @app.get("/stock-items")
@@ -334,3 +388,27 @@ async def get_sales_vouchers(
     raw_vchs = _extract_objects(parsed, "VOUCHER")
     vouchers = [_clean_voucher(r) for r in raw_vchs]
     return {"count": len(vouchers), "vouchers": vouchers}
+
+
+@app.get("/api/stock-summary")
+async def get_stock_summary(
+    company_name: str = Query(..., description="Tally company name"),
+):
+    """Fetch stock-in-hand (closing balance) for all stock items."""
+    xml_str = build_fetch_stock_summary_xml(company_name)
+    parsed = await _fetch_from_tally(xml_str)
+    if "error" in parsed:
+        return parsed
+
+    collection = (
+        parsed.get("ENVELOPE", {})
+        .get("BODY", {})
+        .get("DATA", {})
+        .get("COLLECTION", {})
+    )
+    raw_items = collection.get("STOCKITEM", [])
+    if isinstance(raw_items, dict):
+        raw_items = [raw_items]
+
+    items = [_clean_stock_summary_item(r) for r in raw_items]
+    return {"count": len(items), "stock_items": items}
