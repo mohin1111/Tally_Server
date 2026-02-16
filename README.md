@@ -15,7 +15,7 @@ A FastAPI application that creates and fetches ledgers, vouchers, and stock item
 ## Setup
 
 ```bash
-cd C:\Users\JainishJain\Tally
+cd C:\Projects\tally_api_server
 
 # Install dependencies
 pip install -r requirements.txt
@@ -39,12 +39,14 @@ The API docs (Swagger UI) will be available at: **http://localhost:8000/docs**
 
 ### Fetch (Export from Tally)
 
-| Method | Endpoint              | Query Params                                  | Description                              |
-|--------|-----------------------|-----------------------------------------------|------------------------------------------|
-| GET    | `/ledgers`            | `company_name`                                | Fetch all ledger masters                 |
-| GET    | `/stock-items`        | `company_name`                                | Fetch all stock items                    |
-| GET    | `/vouchers/purchase`  | `company_name`, `from_date`, `to_date`        | Fetch purchase vouchers in a date range  |
-| GET    | `/vouchers/sales`     | `company_name`, `from_date`, `to_date`        | Fetch sales vouchers in a date range     |
+| Method | Endpoint                       | Query Params                                  | Description                              |
+|--------|--------------------------------|-----------------------------------------------|------------------------------------------|
+| GET    | `/ledgers`                     | `company_name`                                | Fetch all ledger masters                 |
+| GET    | `/api/ledger/by-gstin/{gstin}` | `company_name`, `username`, `password`        | Look up a ledger by GSTIN                |
+| GET    | `/stock-items`                 | `company_name`                                | Fetch all stock items                    |
+| GET    | `/api/stock-summary`           | `company_name`, `username`, `password`        | Fetch stock-in-hand summary              |
+| GET    | `/vouchers/purchase`           | `company_name`, `from_date`, `to_date`        | Fetch purchase vouchers in a date range  |
+| GET    | `/vouchers/sales`              | `company_name`, `from_date`, `to_date`        | Fetch sales vouchers in a date range     |
 
 > **Note:** `from_date` and `to_date` use the **YYYYMMDD** format (e.g., `20250401` for April 1, 2025).
 
@@ -254,6 +256,61 @@ The purchase and sales endpoints also support Payment and Receipt vouchers — j
 }
 ```
 
+## Fetching Ledger by GSTIN
+
+**Endpoint:** `GET /api/ledger/by-gstin/{gstin}?company_name=ABC Traders`
+
+Looks up a single ledger by its GSTIN (supports partial or full match).
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "company_name": "ABC Traders",
+  "username": null,
+  "password": null,
+  "gstin": "27AAACR5055K1Z5",
+  "ledger_name": "Reliance Industries Ltd",
+  "ledger": {
+    "name": "Reliance Industries Ltd",
+    "group": "Sundry Debtors",
+    "gstin": "27AAACR5055K1Z5",
+    "gst_registration_type": "Regular",
+    "country": "India"
+  }
+}
+```
+
+If no ledger is found, returns `404` with an error message.
+
+## Fetching Stock Summary
+
+**Endpoint:** `GET /api/stock-summary?company_name=ABC Traders`
+
+Returns the closing balance for all stock items.
+
+**Response:**
+
+```json
+{
+  "company_name": "ABC Traders",
+  "username": null,
+  "password": null,
+  "count": 30,
+  "stock_items": [
+    {
+      "name": "Gold Bar 24K",
+      "group": "Gold and Jewellery",
+      "unit": "",
+      "closing_balance": "",
+      "closing_value": "",
+      "closing_rate": ""
+    }
+  ]
+}
+```
+
 ## Fetching Ledgers
 
 **Endpoint:** `GET /ledgers?company_name=ABC Traders`
@@ -406,7 +463,7 @@ Common errors:
 ## Project Structure
 
 ```
-Tally/
+tally_api_server/
 ├── app.py                          # FastAPI server with all endpoints (create + fetch)
 ├── models.py                       # Pydantic models for ledger creation (394+ fields)
 ├── xml_builder.py                  # XML builder for ledger masters
@@ -416,13 +473,8 @@ Tally/
 ├── sales_xml_builder.py            # XML builder for sales/receipt vouchers
 ├── fetch_xml_builder.py            # XML builder for export (fetch) requests
 ├── requirements.txt                # Python dependencies
-├── ledger_master.json              # Reference JSON — all ledger fields
 ├── ledger_api_contract.json        # API contract for ledger endpoint
-├── purchase_master.json            # Reference JSON — all purchase voucher fields
-├── sales_master.json               # Reference JSON — sales voucher example
-├── LedgerMaster_Template.xml       # Reference XML template for ledgers
-├── PurchaseVoucher_Template.xml    # Reference XML template for purchase vouchers
-└── SalesVoucher_Template.xml       # Reference XML template for sales vouchers
+└── README.md                       # This file
 ```
 
 ## Quick Start Example
