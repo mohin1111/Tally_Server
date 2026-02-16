@@ -27,7 +27,7 @@ app = FastAPI(
 )
 
 TALLY_URL = "http://localhost:9000"
-DEFAULT_COMPANY = "ABC Traders"
+DEFAULT_COMPANY = "Test Traders"
 
 
 @app.get("/health")
@@ -310,11 +310,16 @@ async def get_ledgers(
 
 
 @app.get("/api/ledger/by-gstin/{gstin}")
-async def get_ledger_by_gstin(gstin: str):
+async def get_ledger_by_gstin(
+    gstin: str,
+    company_name: str = Query(..., description="Tally company name"),
+    username: str | None = Query(None, description="Tally username"),
+    password: str | None = Query(None, description="Tally password"),
+):
     """Look up a single ledger by its GSTIN (partial or full match)."""
     gstin_upper = gstin.strip().upper()
 
-    xml_str = build_fetch_ledgers_xml(DEFAULT_COMPANY)
+    xml_str = build_fetch_ledgers_xml(company_name)
     parsed = await _fetch_from_tally(xml_str)
     if "error" in parsed:
         return parsed
@@ -325,17 +330,25 @@ async def get_ledger_by_gstin(gstin: str):
         party_gstin = (raw.get("PARTYGSTIN") or "").strip().upper()
         if gstin_upper in party_gstin:
             cleaned = _clean_ledger(raw)
-            return {
-                "status": "success",
-                "gstin": party_gstin,
-                "ledger_name": cleaned["name"],
-                "ledger": cleaned,
-            }
+            return JSONResponse(
+                content={
+                    "status": "success",
+                    "company_name": company_name,
+                    "username": username,
+                    "password": password,
+                    "gstin": party_gstin,
+                    "ledger_name": cleaned["name"],
+                    "ledger": cleaned,
+                }
+            )
 
     return JSONResponse(
         status_code=404,
         content={
             "status": "error",
+            "company_name": company_name,
+            "username": username,
+            "password": password,
             "message": f"No ledger found for GSTIN: {gstin_upper}",
         },
     )
@@ -393,6 +406,8 @@ async def get_sales_vouchers(
 @app.get("/api/stock-summary")
 async def get_stock_summary(
     company_name: str = Query(..., description="Tally company name"),
+    username: str | None = Query(None, description="Tally username"),
+    password: str | None = Query(None, description="Tally password"),
 ):
     """Fetch stock-in-hand (closing balance) for all stock items."""
     xml_str = build_fetch_stock_summary_xml(company_name)
@@ -411,4 +426,10 @@ async def get_stock_summary(
         raw_items = [raw_items]
 
     items = [_clean_stock_summary_item(r) for r in raw_items]
-    return {"count": len(items), "stock_items": items}
+    return {
+        "company_name": company_name,
+        "username": username,
+        "password": password,
+        "count": len(items),
+        "stock_items": items,
+    }
