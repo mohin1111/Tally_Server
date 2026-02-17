@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 
 
 # ==================== NESTED LIST MODELS ====================
@@ -184,6 +184,20 @@ class LedgerRequest(BaseModel):
     # --- Required ---
     name: str
     parent: str
+
+    @model_validator(mode='before')
+    @classmethod
+    def map_aliases(cls, data):
+        """Accept 'gstin' as shorthand for 'party_gstin' and 'country' for 'country_of_residence'."""
+        if isinstance(data, dict):
+            if 'gstin' in data and 'party_gstin' not in data:
+                data['party_gstin'] = data.pop('gstin')
+            if 'country' in data and 'country_of_residence' not in data:
+                data['country_of_residence'] = data.pop('country')
+            # Auto-enable GST when GSTIN is provided
+            if data.get('party_gstin') and data.get('is_gst_applicable') is None:
+                data['is_gst_applicable'] = True
+        return data
 
     # --- Basic Identity ---
     currency_name: Optional[str] = None
