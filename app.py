@@ -10,9 +10,11 @@ from fastapi.responses import JSONResponse
 from models import CreateLedgerPayload
 from purchase_models import CreatePurchasePayload
 from sales_models import CreateSalesPayload
+from invoice_models import CreateInvoicePayload
 from xml_builder import build_ledger_xml
 from purchase_xml_builder import build_purchase_xml
 from sales_xml_builder import build_sales_xml
+from invoice_xml_builder import build_invoice_xml
 from fetch_xml_builder import (
     build_fetch_ledgers_xml,
     build_fetch_stock_items_xml,
@@ -27,7 +29,7 @@ app = FastAPI(
 )
 
 TALLY_URL = "http://localhost:9000"
-DEFAULT_COMPANY = "Test Traders"
+DEFAULT_COMPANY = "Test Company"
 
 
 @app.get("/health")
@@ -115,6 +117,12 @@ async def create_purchase(payload: CreatePurchasePayload):
 @app.post("/create-sales")
 async def create_sales(payload: CreateSalesPayload):
     xml_str = build_sales_xml(payload)
+    return await _post_to_tally(xml_str)
+
+
+@app.post("/create-invoice")
+async def create_invoice(payload: CreateInvoicePayload):
+    xml_str = build_invoice_xml(payload)
     return await _post_to_tally(xml_str)
 
 
