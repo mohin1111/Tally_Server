@@ -1,8 +1,35 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python:*)",
-      "Bash(cmd.exe /c \"powershell -ExecutionPolicy Bypass -Command \"\"Get-Content ''C:\\\\Users\\\\JainishJain\\\\Tally\\\\Master.xml'' -Encoding Unicode -TotalCount 50\"\"\")"
+      "Bash(git clone:*)",
+      "Bash(pip3 install:*)",
+      "Bash(uvicorn app:app:*)",
+      "Bash(curl:*)",
+      "Bash(ping:*)",
+      "Bash(nc:*)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlctl\" list -a)",
+      "Bash(prlctl list:*)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlctl\" exec \"Windows 11\" cmd /c \"echo test\")",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlctl\" exec \"Windows 11\" cmd /c \"curl -s http://localhost:9000\")",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlsrvctl\" net set shared --portwf add --proto tcp --hostport 9000 --guestip 10.211.55.3 --guestport 9000)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlsrvctl\" net set shared --help)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlsrvctl\" net info shared)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlsrvctl\" net list)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlsrvctl\" net set Shared --nat-tcp-add tally,9000,10.211.55.3,9000)",
+      "Bash(lsof:*)",
+      "Bash(python3:*)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlctl\" exec \"Windows 11\" cmd /c \"netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=9001 connectaddress=127.0.0.1 connectport=9000\")",
+      "Bash(sudo -n \"/Applications/Parallels Desktop.app/Contents/MacOS/prlsrvctl\" net set:*)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlsrvctl\" net set Shared --nat-tcp-del tally)",
+      "Bash(kill:*)",
+      "Bash(~/tally_proxy_tmp/test.txt)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlctl\" exec \"Windows 11\" cmd /c \"type \"\"\\\\\\\\Mac\\\\Home\\\\tally_proxy_tmp\\\\test.txt\"\"\")",
+      "Bash(~/Desktop/tally_proxy_tmp/test.txt)",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlctl\" exec \"Windows 11\" cmd /c \"type \"\"\\\\\\\\Mac\\\\Home\\\\Desktop\\\\tally_proxy_tmp\\\\test.txt\"\"\")",
+      "Bash(\"/Applications/Parallels Desktop.app/Contents/MacOS/prlctl\" exec \"Windows 11\" cmd /c \"curl -s -X POST -H \"\"Content-Type: application/xml\"\" -d \"\"<ENVELOPE><HEADER><VERSION>1</VERSION><TALLYREQUEST>Export</TALLYREQUEST><TYPE>Collection</TYPE><ID>CompanyList</ID></HEADER><BODY><DESC><STATICVARIABLES><SVEXPORTFORMAT>$$ysName:XML</SVEXPORTFORMAT></STATICVARIABLES><TDL><TDLMESSAGE><COLLECTION NAME=''CompanyList''><TYPE>Company</TYPE><FETCH>Name</FETCH></COLLECTION></TDLMESSAGE></TDL></DESC></BODY></ENVELOPE>\"\" http://localhost:9000\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

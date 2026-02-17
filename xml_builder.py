@@ -59,6 +59,55 @@ def _add_address_list(parent: ET.Element, lines: list[str] | None) -> None:
             addr_el.text = line
 
 
+# ==================== GSTIN STATE CODE MAP ====================
+
+_GSTIN_STATE_MAP: dict[str, str] = {
+    "01": "Jammu & Kashmir",
+    "02": "Himachal Pradesh",
+    "03": "Punjab",
+    "04": "Chandigarh",
+    "05": "Uttarakhand",
+    "06": "Haryana",
+    "07": "Delhi",
+    "08": "Rajasthan",
+    "09": "Uttar Pradesh",
+    "10": "Bihar",
+    "11": "Sikkim",
+    "12": "Arunachal Pradesh",
+    "13": "Nagaland",
+    "14": "Manipur",
+    "15": "Mizoram",
+    "16": "Tripura",
+    "17": "Meghalaya",
+    "18": "Assam",
+    "19": "West Bengal",
+    "20": "Jharkhand",
+    "21": "Odisha",
+    "22": "Chhattisgarh",
+    "23": "Madhya Pradesh",
+    "24": "Gujarat",
+    "25": "Dadra & Nagar Haveli and Daman & Diu",
+    "26": "Dadra & Nagar Haveli and Daman & Diu",
+    "27": "Maharashtra",
+    "29": "Karnataka",
+    "30": "Goa",
+    "31": "Lakshadweep",
+    "32": "Kerala",
+    "33": "Tamil Nadu",
+    "34": "Puducherry",
+    "35": "Andaman & Nicobar Islands",
+    "36": "Telangana",
+    "37": "Andhra Pradesh",
+}
+
+
+def _state_from_gstin(gstin: str | None) -> str | None:
+    """Extract state name from the first 2 digits of a GSTIN."""
+    if gstin and len(gstin) >= 2:
+        return _GSTIN_STATE_MAP.get(gstin[:2])
+    return None
+
+
 # ==================== SCALAR FIELD MAP ====================
 # Maps LedgerRequest field names to XML tag names for simple text fields.
 SCALAR_FIELDS: list[tuple[str, str]] = [
@@ -553,6 +602,23 @@ def _build_ledger_element(ledger: LedgerRequest) -> ET.Element:
     if ledger.gst_reg_details:
         for grd in ledger.gst_reg_details:
             _build_gst_reg_details(led, grd)
+    elif ledger.party_gstin:
+        # Auto-generate GST registration details from party_gstin
+        el = ET.SubElement(led, "LEDGSTREGDETAILS.LIST")
+        _add_text_element(el, "APPLICABLEFROM", "20170701")
+        _add_text_element(
+            el, "GSTREGISTRATIONTYPE",
+            ledger.gst_registration_type or "Regular",
+        )
+        state = _state_from_gstin(ledger.party_gstin)
+        if state:
+            _add_text_element(el, "STATE", state)
+            _add_text_element(el, "PLACEOFSUPPLY", state)
+        _add_text_element(el, "GSTIN", ledger.party_gstin)
+        _add_bool_element(el, "ISOTHTERRITORYASSESSEE", None)
+        _add_bool_element(el, "CONSIDERPURCHASEFOREXPORT", None)
+        _add_bool_element(el, "ISTRANSPORTER", None)
+        _add_bool_element(el, "ISCOMMONPARTY", None)
     else:
         _add_empty_list(led, "LEDGSTREGDETAILS.LIST")
 
